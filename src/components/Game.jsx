@@ -7,6 +7,11 @@ const Game = ({ codeSnippet, onComplete, onMistake, onStatsUpdate }) => {
   const [isError, setIsError] = useState(false);
 
   const handleKeyDown = useCallback((e) => {
+
+    if (e.key === ' ') {
+      e.preventDefault();
+    }
+
     if (e.key.length !== 1 && e.key !== 'Enter') return;
 
     const nextChar = codeSnippet[userInput.length];
