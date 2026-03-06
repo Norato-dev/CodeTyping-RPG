@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+:root {
+  --neon-green: #00ff41;
+  --neon-pink: #ff00ff;
+  --neon-blue: #00f3ff;
+  --dark-void: #020617;
+}
+
+body {
+  background-color: var(---void);
+  color: #f8fafc;
+  margin: 0;
+}
