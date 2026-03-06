@@ -3,13 +3,12 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCGP7UyGGG7HcdZVcG6COs7ZfZFeaqrsh0",
-  authDomain: "codetypingrpg.firebaseapp.com",
-  projectId: "codetypingrpg",
-  storageBucket: "codetypingrpg.firebasestorage.app",
-  messagingSenderId: "156840725485",
-  appId: "1:156840725485:web:e38fa249a7bbef01dab5e4",
-  measurementId: "G-LNY6PPKEDZ"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
