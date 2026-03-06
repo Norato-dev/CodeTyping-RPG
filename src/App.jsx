@@ -12,6 +12,7 @@ import Auth from './components/Auth';
 import UserDashboard from './components/UserDashboard';
 import ConfirmModal from './components/ConfirmModal';
 import MissionGrid from './components/MissionGrid';
+import Footer from './components/Footer';
 
 import { Terminal, Star, Shield, Lock, Clock, AlertTriangle, Zap, Target } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -266,6 +267,11 @@ function App() {
           )}
         </AnimatePresence>
       </main>
+
+      <Footer 
+      githubUrl="https://github.com/Norato-dev/" 
+      developerName="David Norato Ramirez" 
+    />
     </div>
   );
 }
