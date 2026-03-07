@@ -72,7 +72,7 @@ Este proyecto está bajo la Licencia MIT.
 
 ## 👤 Autor
 
-Desarrollado con ❤️ por **David Norato Ramirez*.
+Desarrollado con ❤️ por **David Norato Ramirez**.
 * **GitHub:** [Norato-Dev](https://github.com/Norato-dev).
 
 *Este proyecto fue creado con fines educativos y para amantes del desarrollo de software.*
