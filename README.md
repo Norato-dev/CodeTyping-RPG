@@ -37,7 +37,7 @@ Si deseas clonar este proyecto y ejecutarlo en tu máquina:
 
 1. **Clona el repositorio:**
    ```bash
-   git clone [https://github.com/Norato-dev/CodeTyping-RPG.git](https://github.com/Norato-dev/CodeTyping-RPG.git)
+   git clone https://github.com/Norato-dev/CodeTyping-RPG.git
    cd CodeTyping-RPG
 
 2. **Instala las dependencias:**
