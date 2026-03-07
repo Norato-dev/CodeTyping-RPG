@@ -5,6 +5,8 @@ import { useAuth } from './hooks/useAuth';
 import { useChallenges } from './hooks/useChallenges';
 import { useGameLogic } from './hooks/useGameLogic';
 import { useAppNavigation } from './hooks/useAppNavigation';
+import { useLeaderboard } from './hooks/useLeaderboard';
+import { useOnboarding } from './hooks/useOnboarding';
 
 import Navbar from './components/Navbar';
 import AuthScreen from './components/AuthScreen';
@@ -12,8 +14,14 @@ import MenuScreen from './components/MenuScreen';
 import PlayScreen from './components/PlayScreen';
 import UserDashboard from './components/UserDashboard';
 import CreateChallenge from './components/CreateChallenge';
+import Leaderboard from './components/Leaderboard';
 import ConfirmModal from './components/ConfirmModal';
 import Footer from './components/Footer';
+import AudioPlayer from './components/AudioPlayer';
+import OnboardingModal from './components/OnboardingModal';
+import OnboardingTour from './components/OnboardingTour';
+import HelpPanel from './components/HelpPanel';
+import HelpButton from './components/HelpButton';
 
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -41,7 +49,23 @@ function App() {
     DIFFICULTY_THEMES
   } = useGameLogic(user);
 
-  // Maneja toda la lógica de navegación de la app
+  // Leaderboard
+  const { leaderboard, loading: leaderboardLoading } = useLeaderboard();
+
+  // Onboarding
+  const {
+    isModalOpen,
+    isTourActive,
+    tourStep,
+    startTour,
+    skipTour,
+    nextStep,
+    previousStep,
+    endTour,
+    resetOnboarding,
+    isHelpOpen,
+    setIsHelpOpen
+  } = useOnboarding(user, userData);
   useAppNavigation(user, screen, currentChallenge, setScreen);
 
   // Manejadores
@@ -114,6 +138,8 @@ function App() {
               {screen === 'dashboard' && <UserDashboard user={user} userData={userData} />}
               
               {screen === 'create' && <CreateChallenge onSuccess={() => setScreen('menu')} />}
+
+              {screen === 'leaderboard' && <Leaderboard leaderboard={leaderboard} loading={leaderboardLoading} />}
             </motion.div>
           )}
         </AnimatePresence>
@@ -122,6 +148,31 @@ function App() {
       <Footer 
         githubUrl="https://github.com/Norato-dev/" 
         developerName="David Norato Ramirez" 
+      />
+
+      <AudioPlayer />
+
+      {/* ONBOARDING COMPONENTS */}
+      <OnboardingModal 
+        isOpen={isModalOpen}
+        onStartTour={startTour}
+        onSkip={skipTour}
+      />
+
+      <OnboardingTour
+        isOpen={isTourActive}
+        tourStep={tourStep}
+        onNext={nextStep}
+        onPrevious={previousStep}
+        onEnd={endTour}
+      />
+
+      <HelpButton onClick={() => setIsHelpOpen(true)} />
+
+      <HelpPanel
+        isOpen={isHelpOpen}
+        onClose={() => setIsHelpOpen(false)}
+        onResetTour={resetOnboarding}
       />
     </div>
   );

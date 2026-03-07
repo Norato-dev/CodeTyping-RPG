@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
 import { doc, updateDoc, deleteDoc, collection, query, where, onSnapshot } from 'firebase/firestore';
-import { Trophy, Zap, Activity, Trash2, Edit2, Code, X, Check } from 'lucide-react';
+import { Trophy, Zap, Activity, Trash2, Edit2, Code, X, Check, Clock, Gauge, Lock } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { usePlayerStats } from '../hooks/usePlayerStats';
+import { useAchievements } from '../hooks/useAchievements';
+import CounterAnimation from './CounterAnimation';
+import ChangePasswordModal from './ChangePasswordModal';
+import Achievements from './Achievements';
 
 const UserDashboard = ({ user, userData }) => {
   const [myChallenges, setMyChallenges] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ title: '', code: '', difficulty: '' });
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const playerStats = usePlayerStats(user?.uid);
+  const { unlockedAchievements, newAchievements } = useAchievements(user?.uid, userData, playerStats);
+
+  // Convertir segundos a formato legible
+  const formatTime = (seconds) => {
+    if (seconds === 0) return '0m';
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    return `${minutes}m`;
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -50,32 +68,85 @@ const UserDashboard = ({ user, userData }) => {
     <div className="max-w-5xl mx-auto space-y-8 pb-20">
       {/* Perfil y Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-slate-900/50 border-2 border-slate-800 p-8 rounded-3xl text-center backdrop-blur-sm">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className="bg-slate-900/50 border-2 border-slate-800 p-8 rounded-3xl text-center backdrop-blur-sm"
+        >
           <div className="relative inline-block mb-6">
-            <img 
-              src={userData.photoURL || `https://api.dicebear.com/7.x/identicon/svg?seed=${user.email}`} 
+            <motion.img
+              src={userData.photoURL || `https://api.dicebear.com/7.x/identicon/svg?seed=${user.email}`}
               className="w-32 h-32 rounded-full border-4 border-cyan-500 shadow-[0_0_20px_#06b6d444]"
               alt="Avatar"
+              whileHover={{ scale: 1.1, boxShadow: '0 0 30px #06b6d4' }}
+              transition={{ type: 'spring', stiffness: 200 }}
+            />
+            <motion.div
+              className="absolute inset-0 rounded-full border-4 border-cyan-500 opacity-0"
+              animate={{ scale: [1, 1.2], opacity: [0.5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
             />
           </div>
           <h2 className="text-2xl font-black text-white italic">{userData.name}</h2>
           <p className="text-[10px] text-cyan-400 font-mono font-bold uppercase mt-2">{userData.role || 'Hacker Novato'}</p>
-        </div>
+          <button 
+            onClick={() => setIsChangePasswordOpen(true)}
+            className="mt-6 px-4 py-2 bg-cyan-600/20 hover:bg-cyan-600 text-cyan-400 hover:text-white border border-cyan-600/50 rounded-lg font-bold text-[10px] uppercase flex items-center justify-center gap-2 transition-all mx-auto"
+          >
+            <Lock size={14} /> CAMBIAR_PASSWORD
+          </button>
+        </motion.div>
 
         <div className="md:col-span-2 bg-slate-900/50 border-2 border-slate-800 p-8 rounded-3xl flex flex-col justify-center">
           <h3 className="text-xl font-black italic mb-6 text-green-500 uppercase flex items-center gap-2"><Activity size={20}/> LOG_DE_COMBATE</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-black/40 p-5 rounded-2xl border border-slate-800 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0, duration: 0.5 }}
+              whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(234, 179, 8, 0.5)' }}
+              className="bg-black/40 p-5 rounded-2xl border border-slate-800 text-center cursor-pointer transition-all"
+            >
               <p className="text-slate-500 text-[9px] uppercase font-bold mb-1">XP TOTAL</p>
-              <div className="flex items-center justify-center gap-2 text-white font-black text-3xl"><Zap className="text-yellow-500" size={18}/>{userData.xp || 0}</div>
-            </div>
-            <div className="bg-black/40 p-5 rounded-2xl border border-slate-800 text-center">
+              <div className="flex items-center justify-center gap-2 text-white font-black text-3xl"><Zap className="text-yellow-500" size={18}/><CounterAnimation value={userData.xp || 0} duration={1} /></div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(236, 72, 153, 0.5)' }}
+              className="bg-black/40 p-5 rounded-2xl border border-slate-800 text-center cursor-pointer transition-all"
+            >
               <p className="text-slate-500 text-[9px] uppercase font-bold mb-1">HACKS COMPLETADOS</p>
-              <div className="flex items-center justify-center gap-2 text-white font-black text-3xl"><Trophy className="text-pink-500" size={18}/>{userData.battlesWon || 0}</div>
-            </div>
+              <div className="flex items-center justify-center gap-2 text-white font-black text-3xl"><Trophy className="text-pink-500" size={18}/><CounterAnimation value={userData.battlesWon || 0} duration={1} /></div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)' }}
+              className="bg-black/40 p-5 rounded-2xl border border-slate-800 text-center cursor-pointer transition-all"
+            >
+              <p className="text-slate-500 text-[9px] uppercase font-bold mb-1">WPM PROMEDIO</p>
+              <div className="flex items-center justify-center gap-2 text-white font-black text-3xl"><Gauge className="text-cyan-400" size={18}/><CounterAnimation value={playerStats.averageWpm} duration={1} /></div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(34, 197, 94, 0.5)' }}
+              className="bg-black/40 p-5 rounded-2xl border border-slate-800 text-center cursor-pointer transition-all"
+            >
+              <p className="text-slate-500 text-[9px] uppercase font-bold mb-1">TIEMPO JUGADO</p>
+              <div className="flex items-center justify-center gap-2 text-white font-black text-3xl"><Clock className="text-green-400" size={18}/>{formatTime(playerStats.totalTimeSeconds)}</div>
+            </motion.div>
           </div>
         </div>
       </div>
+
+      {/* LOGROS */}
+      <Achievements unlockedAchievements={unlockedAchievements} newAchievements={newAchievements} />
 
       {/* GESTOR DE NIVELES PROPIOS */}
       <div className="bg-slate-900/50 border-2 border-slate-800 rounded-3xl p-8 shadow-xl">
@@ -153,6 +224,8 @@ const UserDashboard = ({ user, userData }) => {
           )}
         </div>
       </div>
+
+      <ChangePasswordModal isOpen={isChangePasswordOpen} onClose={() => setIsChangePasswordOpen(false)} />
     </div>
   );
 };

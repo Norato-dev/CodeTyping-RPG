@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Clock, AlertTriangle, Zap, Target, Star } from 'lucide-react';
 import Game from './Game';
+import Confetti from './Confetti';
+import XPPopup from './XPPopup';
 
 const PlayScreen = ({
   currentChallenge,
@@ -17,8 +19,19 @@ const PlayScreen = ({
   onMistake,
   onStatsUpdate
 }) => {
+  const [showXPPopup, setShowXPPopup] = useState(false);
+
+  useEffect(() => {
+    if (gainedXP && gainedXP > 0) {
+      setShowXPPopup(true);
+      const timer = setTimeout(() => setShowXPPopup(false), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [gainedXP]);
   return (
     <div className="max-w-6xl mx-auto w-full flex flex-col items-center py-10">
+      <Confetti trigger={isDefeated} />
+      <XPPopup xp={gainedXP} isVisible={showXPPopup} />
       {/* HUD SUPERIOR */}
       <div className="w-full max-w-4xl flex justify-between items-center mb-8 bg-slate-900/50 p-6 rounded-3xl border border-slate-800 backdrop-blur-md">
         <div className="flex items-center gap-6">
@@ -71,17 +84,6 @@ const PlayScreen = ({
                 alt="Enemy"
               />
             </motion.div>
-            <AnimatePresence>
-              {gainedXP && (
-                <motion.div 
-                  initial={{ y: 20, opacity: 0 }} 
-                  animate={{ y: -50, opacity: 1 }} 
-                  className="absolute inset-0 flex items-center justify-center text-4xl font-black text-yellow-400 z-50"
-                >
-                  <Star className="mr-2" fill="currentColor" /> +{gainedXP} XP
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* LIVE STATS RECUADROS (WPM & SYNC) */}

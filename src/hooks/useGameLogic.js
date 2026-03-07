@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { doc, updateDoc, increment, arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc, increment, arrayUnion, collection, addDoc } from 'firebase/firestore';
 
 const playSound = (type) => {
   const audio = new Audio(`/sounds/${type}.wav`);
@@ -68,6 +68,23 @@ export const useGameLogic = (user) => {
       
       if (user) {
         const userRef = doc(db, "players", user.uid);
+        const totalGameTime = DIFFICULTY_THEMES[currentChallenge.difficulty].time;
+        const durationSeconds = totalGameTime - timeLeft;
+        
+        // Guardar stats de la partida
+        await addDoc(collection(db, "players", user.uid, "gameHistory"), {
+          challengeId: currentChallenge.id,
+          challengeTitle: currentChallenge.title,
+          difficulty: currentChallenge.difficulty,
+          wpm: finalWpm,
+          duration: durationSeconds,
+          livesRemaining: lives,
+          xpGained: xpReward,
+          completed: true,
+          timestamp: new Date()
+        });
+        
+        // Actualizar datos del usuario
         await updateDoc(userRef, { 
           xp: increment(xpReward), 
           battlesWon: increment(1),

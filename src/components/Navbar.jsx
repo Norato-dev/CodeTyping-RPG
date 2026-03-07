@@ -51,6 +51,16 @@ const Navbar = ({ user, screen, onScreenChange, onLogoutRequest }) => {
                 >
                   [ PERFIL ]
                 </button>
+                <button 
+                  onClick={() => handleNavClick('leaderboard')} 
+                  className={`text-[10px] font-black uppercase px-4 py-2 rounded-lg transition-all ${
+                    screen === 'leaderboard'
+                      ? 'bg-yellow-500/30 text-yellow-400 border border-yellow-500/50'
+                      : 'text-yellow-500 hover:bg-yellow-500/10'
+                  }`}
+                >
+                  🏆 RANKING
+                </button>
               </>
             )}
             <Auth user={user} onLogoutRequest={onLogoutRequest} />
@@ -98,6 +108,16 @@ const Navbar = ({ user, screen, onScreenChange, onLogoutRequest }) => {
                 }`}
               >
                 [ PERFIL ]
+              </button>
+              <button 
+                onClick={() => handleNavClick('leaderboard')} 
+                className={`text-sm font-black uppercase px-4 py-3 rounded-lg transition-all text-left ${
+                  screen === 'leaderboard'
+                    ? 'bg-yellow-500/30 text-yellow-400 border border-yellow-500/50'
+                    : 'text-yellow-500 hover:bg-yellow-500/10'
+                }`}
+              >
+                🏆 RANKING
               </button>
             </div>
           </motion.div>
