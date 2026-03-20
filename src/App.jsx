@@ -17,7 +17,6 @@ import CreateChallenge from './components/CreateChallenge';
 import Leaderboard from './components/Leaderboard';
 import ConfirmModal from './components/ConfirmModal';
 import Footer from './components/Footer';
-import AudioPlayer from './components/AudioPlayer';
 import OnboardingModal from './components/OnboardingModal';
 import OnboardingTour from './components/OnboardingTour';
 import HelpPanel from './components/HelpPanel';
@@ -149,8 +148,6 @@ function App() {
         githubUrl="https://github.com/Norato-dev/" 
         developerName="David Norato Ramirez" 
       />
-
-      <AudioPlayer />
 
       {/* ONBOARDING COMPONENTS */}
       <OnboardingModal 
