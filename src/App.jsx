@@ -8,19 +8,19 @@ import { useAppNavigation } from './hooks/useAppNavigation';
 import { useLeaderboard } from './hooks/useLeaderboard';
 import { useOnboarding } from './hooks/useOnboarding';
 
-import Navbar from './components/Navbar';
-import AuthScreen from './components/AuthScreen';
-import MenuScreen from './components/MenuScreen';
-import PlayScreen from './components/PlayScreen';
-import UserDashboard from './components/UserDashboard';
-import CreateChallenge from './components/CreateChallenge';
-import Leaderboard from './components/Leaderboard';
-import ConfirmModal from './components/ConfirmModal';
-import Footer from './components/Footer';
-import OnboardingModal from './components/OnboardingModal';
-import OnboardingTour from './components/OnboardingTour';
-import HelpPanel from './components/HelpPanel';
-import HelpButton from './components/HelpButton';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import AuthScreen from './components/auth/AuthScreen';
+import MenuScreen from './components/screens/MenuScreen';
+import PlayScreen from './components/screens/PlayScreen';
+import UserDashboard from './components/screens/UserDashboard';
+import Leaderboard from './components/screens/Leaderboard';
+import CreateChallenge from './components/ui/CreateChallenge';
+import ConfirmModal from './components/ui/ConfirmModal';
+import OnboardingModal from './components/onboarding/OnboardingModal';
+import OnboardingTour from './components/onboarding/OnboardingTour';
+import HelpPanel from './components/onboarding/HelpPanel';
+import HelpButton from './components/onboarding/HelpButton';
 
 import { motion, AnimatePresence } from 'framer-motion';
 

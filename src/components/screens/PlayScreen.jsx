@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Clock, AlertTriangle, Zap, Target, Star } from 'lucide-react';
-import Game from './Game';
-import Confetti from './Confetti';
-import XPPopup from './XPPopup';
+import Game from '../game/Game';
+import Confetti from '../game/Confetti';
+import XPPopup from '../game/XPPopup';
 
 const PlayScreen = ({
   currentChallenge,

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { db, auth } from '../firebase';
+import { db, auth } from '../../firebase';
 import { doc, updateDoc, deleteDoc, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { Trophy, Zap, Activity, Trash2, Edit2, Code, X, Check, Clock, Gauge, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { usePlayerStats } from '../hooks/usePlayerStats';
-import { useAchievements } from '../hooks/useAchievements';
-import CounterAnimation from './CounterAnimation';
-import ChangePasswordModal from './ChangePasswordModal';
+import { usePlayerStats } from '../../hooks/usePlayerStats';
+import { useAchievements } from '../../hooks/useAchievements';
+import CounterAnimation from '../ui/CounterAnimation';
+import ChangePasswordModal from '../auth/ChangePasswordModal';
 import Achievements from './Achievements';
 
 const UserDashboard = ({ user, userData }) => {

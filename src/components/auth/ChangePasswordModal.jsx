@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, X, CheckCircle, AlertCircle } from 'lucide-react';
-import { auth } from '../firebase';
+import { auth } from '../../firebase';
 import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 
 const ChangePasswordModal = ({ isOpen, onClose }) => {

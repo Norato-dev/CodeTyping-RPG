@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, Volume2, Volume1, VolumeX } from 'lucide-react';
-import { useAudioPlayer } from '../hooks/useAudioPlayer';
+import { useAudioPlayer } from '../../hooks/useAudioPlayer';
 
 const AudioPlayer = () => {
   const { isPlaying, togglePlay, volume, setVolume } = useAudioPlayer('/music/ambient.mp3');

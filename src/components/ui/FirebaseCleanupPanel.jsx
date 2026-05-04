@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { findOrphanedUsers, deleteOrphanedUser, cleanupDuplicateEmail } from '../utils/firebaseCleanup';
+import { findOrphanedUsers, deleteOrphanedUser, cleanupDuplicateEmail } from '../../utils/firebaseCleanup';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, AlertTriangle, CheckCircle, Search, Loader } from 'lucide-react';
 

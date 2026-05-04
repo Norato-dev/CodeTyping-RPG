@@ -1,5 +1,5 @@
 import React from 'react';
-import MissionGrid from './MissionGrid';
+import MissionGrid from '../game/MissionGrid';
 
 const MenuScreen = ({ 
   challenges, 

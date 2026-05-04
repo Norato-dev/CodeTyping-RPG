@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock } from 'lucide-react';
-import { ACHIEVEMENTS } from '../data/achievements';
+import { ACHIEVEMENTS } from '../../data/achievements';
 
 const Achievements = ({ unlockedAchievements, newAchievements }) => {
   // Estilos de shimmer para badges nuevos

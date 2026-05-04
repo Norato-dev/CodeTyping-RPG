@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Terminal, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Auth from './Auth';
+import Auth from '../auth/Auth';
 
 const Navbar = ({ user, screen, onScreenChange, onLogoutRequest }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

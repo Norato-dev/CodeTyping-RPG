@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { db, auth } from '../firebase';
+import { db, auth } from '../../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { Terminal, Code, BarChart3, Save } from 'lucide-react';
 
