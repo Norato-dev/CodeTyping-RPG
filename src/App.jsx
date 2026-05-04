@@ -30,7 +30,7 @@ function App() {
 
   // Hooks personalizados
   const { user, userData, logout } = useAuth();
-  const { challenges, myCustomChallenges } = useChallenges();
+  const { challenges, myCustomChallenges } = useChallenges(user?.uid);
   const {
     currentChallenge,
     lives,

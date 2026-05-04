@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { db, auth } from '../firebase';
+import { db } from '../firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 
-export const useChallenges = () => {
+export const useChallenges = (userId = null) => {
   const [challenges, setChallenges] = useState([]);
   const [myCustomChallenges, setMyCustomChallenges] = useState([]);
 
@@ -11,11 +11,11 @@ export const useChallenges = () => {
     const unsubData = onSnapshot(q, (snap) => {
       const allLevels = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       setChallenges(allLevels.filter(c => !c.userId));
-      setMyCustomChallenges(allLevels.filter(c => c.userId === auth.currentUser?.uid));
+      setMyCustomChallenges(allLevels.filter(c => userId && c.userId === userId));
     });
 
     return () => unsubData();
-  }, []);
+  }, [userId]);
 
   return { challenges, myCustomChallenges };
 };

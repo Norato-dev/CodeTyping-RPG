@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { 
-  signInWithPopup, 
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider, 
   signOut, 
   createUserWithEmailAndPassword, 
@@ -23,6 +25,22 @@ const Auth = ({ user, onLogoutRequest }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const googleProvider = new GoogleAuthProvider();
+
+  // Manejar el resultado del redirect de Google (producción)
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (result?.user) {
+          await createUserProfile(result.user);
+          setIsOpen(false);
+        }
+      })
+      .catch((error) => {
+        if (error.code !== 'auth/no-auth-event') {
+          console.error('Redirect result error:', error);
+        }
+      });
+  }, []);
 
   const createUserProfile = async (u) => {
     const userRef = doc(db, "players", u.uid);
@@ -58,14 +76,34 @@ const Auth = ({ user, onLogoutRequest }) => {
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
+    setMessage('');
     try {
       const res = await signInWithPopup(auth, googleProvider);
       await createUserProfile(res.user);
       setIsOpen(false);
-    } catch (error) { 
-      console.error(error);
-      setMessageType('error');
-      setMessage('⚠ Error al conectar con Google');
+    } catch (error) {
+      console.error('Google login error:', error.code, error.message);
+      if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+        // Fallback a redirect si el popup es bloqueado
+        try {
+          await signInWithRedirect(auth, googleProvider);
+        } catch (redirectError) {
+          console.error('Redirect error:', redirectError);
+          setMessageType('error');
+          setMessage('⚠ Error al conectar con Google');
+          setIsLoading(false);
+        }
+        return;
+      } else if (error.code === 'auth/unauthorized-domain') {
+        setMessageType('error');
+        setMessage('⚠ Dominio no autorizado en Firebase Console');
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        setMessageType('error');
+        setMessage('Inicio de sesión cancelado');
+      } else {
+        setMessageType('error');
+        setMessage('⚠ Error al conectar con Google');
+      }
     } finally {
       setIsLoading(false);
     }
